@@ -2,7 +2,7 @@ import https from 'node:https';
 import { execSync } from 'node:child_process';
 import {
   existsSync, mkdirSync, readFileSync, writeFileSync, statSync,
-  createWriteStream, unlinkSync, copyFileSync, readdirSync, renameSync
+  createWriteStream, unlinkSync, readdirSync, renameSync
 } from 'node:fs';
 import { join, dirname } from 'node:path';
 
@@ -175,14 +175,16 @@ async function buildVersion(mcVersion: string): Promise<VersionEntry | null> {
 
   log(`  Using Java ${minJava}+ (${javaPath})`);
 
-  // Copy BuildTools to folder
-  const btJar = join(folder, 'BuildTools.jar');
-  copyFileSync(BUILDTOOLS_PATH, btJar);
+  // Verify BuildTools.jar exists and is valid
+  if (!existsSync(BUILDTOOLS_PATH) || statSync(BUILDTOOLS_PATH).size < 1_000_000) {
+    log(`  [SKIP] BuildTools.jar missing or too small`);
+    return null;
+  }
 
   try {
     const javaHome = dirname(dirname(javaPath));
-    log(`  Building...`);
-    execSync(`"${javaPath}" -jar BuildTools.jar --rev ${mcVersion} 2>&1`, {
+    log(`  Building with BuildTools...`);
+    execSync(`"${javaPath}" -jar "${BUILDTOOLS_PATH}" --rev ${mcVersion} 2>&1`, {
       cwd: folder,
       stdio: 'pipe',
       timeout: 900_000, // 15 min
@@ -233,8 +235,13 @@ async function buildVersion(mcVersion: string): Promise<VersionEntry | null> {
     log(`  [FAIL] JAR not found after build`);
     return null;
   } catch (err) {
-    const msg = (err as Error).message.substring(0, 300);
+    const e = err as { message?: string; stderr?: Buffer | string; stdout?: Buffer | string };
+    const stderr = e.stderr ? (Buffer.isBuffer(e.stderr) ? e.stderr.toString() : e.stderr) : '';
+    const stdout = e.stdout ? (Buffer.isBuffer(e.stdout) ? e.stdout.toString() : e.stdout) : '';
+    const msg = (e.message || '').substring(0, 500);
     log(`  [FAIL] ${msg}`);
+    if (stderr) log(`  STDERR: ${stderr.substring(0, 500)}`);
+    if (stdout) log(`  STDOUT: ${stdout.substring(0, 500)}`);
     return null;
   }
 }
