@@ -93,34 +93,60 @@ function getAllVersions(): Promise<string[]> {
 }
 
 function findJava(requiredMajor: number): string | null {
-  // In GitHub Actions, JAVA_HOME is set
-  const javaHome = process.env.JAVA_HOME;
-  if (javaHome) {
-    const javaExe = join(javaHome, 'bin', 'java.exe');
-    if (existsSync(javaExe)) return javaExe;
-    // Try without .exe for Linux
-    const javaBin = join(javaHome, 'bin', 'java');
-    if (existsSync(javaBin)) return javaBin;
+  const isWindows = process.platform === 'win32';
+  const exe = isWindows ? 'java.exe' : 'java';
+
+  // Build a list of available JDKs from env vars (GitHub Actions)
+  const javaHomes: { version: number; path: string }[] = [];
+
+  for (const [key, val] of Object.entries(process.env)) {
+    const m = key.match(/^JAVA_HOME_(\d+)$/);
+    if (m && val) {
+      const ver = parseInt(m[1]);
+      const javaPath = join(val, 'bin', exe);
+      if (existsSync(javaPath)) {
+        javaHomes.push({ version: ver, path: javaPath });
+      }
+    }
   }
 
-  // Try common paths
-  const paths = [
+  // Also check plain JAVA_HOME
+  const jh = process.env.JAVA_HOME;
+  if (jh) {
+    const javaPath = join(jh, 'bin', exe);
+    if (existsSync(javaPath)) {
+      try {
+        const v = execSync(`"${javaPath}" -version 2>&1`, { encoding: 'utf-8' });
+        const m = v.match(/version "(\d+)/);
+        if (m) {
+          const ver = parseInt(m[1]);
+          if (!javaHomes.find(j => j.version === ver)) {
+            javaHomes.push({ version: ver, path: javaPath });
+          }
+        }
+      } catch {}
+    }
+  }
+
+  // Also scan /usr/lib/jvm and common Windows paths
+  const scanPaths = [
     'C:\\Program Files\\Java',
     'C:\\Program Files\\Eclipse Adoptium',
-    'C:\\Program Files\\Microsoft',
     '/usr/lib/jvm',
     '/usr/local/lib/jvm',
   ];
-
-  for (const root of paths) {
+  for (const root of scanPaths) {
     try {
       for (const dir of readdirSync(root)) {
         if (dir.toLowerCase().includes('jdk') || dir.toLowerCase().includes('jre')) {
           const ver = parseInt(dir.match(/(\d+)/)?.[1] ?? '0');
-          if (ver >= requiredMajor) {
-            for (const exe of ['java.exe', 'java']) {
-              const p = join(root, dir, 'bin', exe);
-              if (existsSync(p)) return p;
+          if (ver > 0 && !javaHomes.find(j => j.version === ver)) {
+            for (const e of [exe, 'java.exe', 'java']) {
+              const p = join(root, dir, 'bin', e);
+              if (existsSync(p)) {
+                javaHomes.push({ version: ver, path: p });
+                break;
+              }
             }
           }
         }
@@ -128,18 +154,25 @@ function findJava(requiredMajor: number): string | null {
     } catch {}
   }
 
-  // Try PATH
-  try {
-    const cmd = process.platform === 'win32' ? 'where java' : 'which java';
-    const pathJava = execSync(cmd, { encoding: 'utf-8' }).trim().split('\n')[0]?.trim();
-    if (pathJava) {
-      const v = execSync(`"${pathJava}" -version 2>&1`, { encoding: 'utf-8' });
-      const m = v.match(/version "(\d+)/);
-      if (m && parseInt(m[1]) >= requiredMajor) return pathJava;
-    }
-  } catch {}
+  if (javaHomes.length === 0) {
+    log(`  No Java installations found`);
+    return null;
+  }
 
-  return null;
+  // Sort by version ascending
+  javaHomes.sort((a, b) => a.version - b.version);
+
+  // Pick the LOWEST version that is >= required
+  // This is critical: BuildTools for MC 1.8 NEEDS Java 8, not Java 25
+  const suitable = javaHomes.filter(j => j.version >= requiredMajor);
+  if (suitable.length === 0) {
+    log(`  No Java ${requiredMajor}+ found (have: ${javaHomes.map(j => j.version).join(', ')})`);
+    return null;
+  }
+
+  const chosen = suitable[0]; // lowest suitable
+  log(`  Using Java ${chosen.version} (need ${requiredMajor}+) at ${chosen.path}`);
+  return chosen.path;
 }
 
 function getRequiredJava(versionData: { javaVersions?: number[] }): number {
@@ -172,8 +205,6 @@ async function buildVersion(mcVersion: string): Promise<VersionEntry | null> {
     log(`  [SKIP] No Java ${minJava}+ found`);
     return null;
   }
-
-  log(`  Using Java ${minJava}+ (${javaPath})`);
 
   // Verify BuildTools.jar exists and is valid
   if (!existsSync(BUILDTOOLS_PATH) || statSync(BUILDTOOLS_PATH).size < 1_000_000) {
