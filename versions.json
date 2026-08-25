@@ -1,4 +1,357 @@
 {
-  "lastUpdated": "",
-  "versions": {}
+  "lastUpdated": "2026-08-25T20:46:48.883Z",
+  "versions": {
+    "1.8.4": {
+      "version": "1.8.4",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 20956971,
+      "filename": "spigot-1.8.4.jar",
+      "timestamp": "2026-08-25T18:29:00.566Z"
+    },
+    "1.8.5": {
+      "version": "1.8.5",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 20957020,
+      "filename": "spigot-1.8.5.jar",
+      "timestamp": "2026-08-25T18:30:48.041Z"
+    },
+    "1.8.6": {
+      "version": "1.8.6",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 20956993,
+      "filename": "spigot-1.8.6.jar",
+      "timestamp": "2026-08-25T18:32:23.258Z"
+    },
+    "1.8.7": {
+      "version": "1.8.7",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 20956971,
+      "filename": "spigot-1.8.7.jar",
+      "timestamp": "2026-08-25T18:34:02.569Z"
+    },
+    "1.8.8": {
+      "version": "1.8.8",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 20956971,
+      "filename": "spigot-1.8.8.jar",
+      "timestamp": "2026-08-25T18:35:36.856Z"
+    },
+    "1.9.4": {
+      "version": "1.9.4",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 22187221,
+      "filename": "spigot-1.9.4.jar",
+      "timestamp": "2026-08-25T18:39:52.576Z"
+    },
+    "1.10": {
+      "version": "1.10",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 22284597,
+      "filename": "spigot-1.10.jar",
+      "timestamp": "2026-08-25T18:41:22.221Z"
+    },
+    "1.10.2": {
+      "version": "1.10.2",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 22284652,
+      "filename": "spigot-1.10.2.jar",
+      "timestamp": "2026-08-25T18:42:51.765Z"
+    },
+    "1.11": {
+      "version": "1.11",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 22715884,
+      "filename": "spigot-1.11.jar",
+      "timestamp": "2026-08-25T18:44:46.031Z"
+    },
+    "1.11.1": {
+      "version": "1.11.1",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 25726094,
+      "filename": "spigot-1.11.1.jar",
+      "timestamp": "2026-08-25T18:46:21.883Z"
+    },
+    "1.11.2": {
+      "version": "1.11.2",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 25726094,
+      "filename": "spigot-1.11.2.jar",
+      "timestamp": "2026-08-25T18:48:03.819Z"
+    },
+    "1.12.1": {
+      "version": "1.12.1",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 42706228,
+      "filename": "spigot-1.12.1.jar",
+      "timestamp": "2026-08-25T18:53:17.074Z"
+    },
+    "1.12.2": {
+      "version": "1.12.2",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 43299901,
+      "filename": "spigot-1.12.2.jar",
+      "timestamp": "2026-08-25T18:56:02.904Z"
+    },
+    "1.13": {
+      "version": "1.13",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 45900021,
+      "filename": "spigot-1.13.jar",
+      "timestamp": "2026-08-25T18:59:11.953Z"
+    },
+    "1.13.1": {
+      "version": "1.13.1",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 46938138,
+      "filename": "spigot-1.13.1.jar",
+      "timestamp": "2026-08-25T19:02:09.760Z"
+    },
+    "1.13.2": {
+      "version": "1.13.2",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 30197080,
+      "filename": "spigot-1.13.2.jar",
+      "timestamp": "2026-08-25T19:04:10.221Z"
+    },
+    "1.14": {
+      "version": "1.14",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 31835438,
+      "filename": "spigot-1.14.jar",
+      "timestamp": "2026-08-25T19:06:05.215Z"
+    },
+    "1.14.1": {
+      "version": "1.14.1",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 31920652,
+      "filename": "spigot-1.14.1.jar",
+      "timestamp": "2026-08-25T19:08:00.295Z"
+    },
+    "1.14.2": {
+      "version": "1.14.2",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 31748905,
+      "filename": "spigot-1.14.2.jar",
+      "timestamp": "2026-08-25T19:09:49.114Z"
+    },
+    "1.14.3": {
+      "version": "1.14.3",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 31821854,
+      "filename": "spigot-1.14.3.jar",
+      "timestamp": "2026-08-25T19:11:39.542Z"
+    },
+    "1.14.4": {
+      "version": "1.14.4",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 32036510,
+      "filename": "spigot-1.14.4.jar",
+      "timestamp": "2026-08-25T19:13:31.183Z"
+    },
+    "1.15": {
+      "version": "1.15",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 32310604,
+      "filename": "spigot-1.15.jar",
+      "timestamp": "2026-08-25T19:15:30.241Z"
+    },
+    "1.15.1": {
+      "version": "1.15.1",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 32334901,
+      "filename": "spigot-1.15.1.jar",
+      "timestamp": "2026-08-25T19:17:16.306Z"
+    },
+    "1.15.2": {
+      "version": "1.15.2",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 32514873,
+      "filename": "spigot-1.15.2.jar",
+      "timestamp": "2026-08-25T19:19:35.995Z"
+    },
+    "1.16.1": {
+      "version": "1.16.1",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 35746305,
+      "filename": "spigot-1.16.1.jar",
+      "timestamp": "2026-08-25T19:21:34.217Z"
+    },
+    "1.16.2": {
+      "version": "1.16.2",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 35726131,
+      "filename": "spigot-1.16.2.jar",
+      "timestamp": "2026-08-25T19:23:25.906Z"
+    },
+    "1.16.3": {
+      "version": "1.16.3",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 35766400,
+      "filename": "spigot-1.16.3.jar",
+      "timestamp": "2026-08-25T19:25:16.398Z"
+    },
+    "1.16.4": {
+      "version": "1.16.4",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 35842303,
+      "filename": "spigot-1.16.4.jar",
+      "timestamp": "2026-08-25T19:27:11.116Z"
+    },
+    "1.16.5": {
+      "version": "1.16.5",
+      "javaVersion": 8,
+      "buildToolsVersion": "",
+      "size": 39119376,
+      "filename": "spigot-1.16.5.jar",
+      "timestamp": "2026-08-25T19:29:24.394Z"
+    },
+    "1.17.1": {
+      "version": "1.17.1",
+      "javaVersion": 16,
+      "buildToolsVersion": "",
+      "size": 45176749,
+      "filename": "spigot-1.17.1.jar",
+      "timestamp": "2026-08-25T19:32:01.296Z"
+    },
+    "1.18.1": {
+      "version": "1.18.1",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 67593933,
+      "filename": "spigot-1.18.1.jar",
+      "timestamp": "2026-08-25T19:36:39.815Z"
+    },
+    "1.18.2": {
+      "version": "1.18.2",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 67880748,
+      "filename": "spigot-1.18.2.jar",
+      "timestamp": "2026-08-25T19:38:50.207Z"
+    },
+    "1.19": {
+      "version": "1.19",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 66978069,
+      "filename": "spigot-1.19.jar",
+      "timestamp": "2026-08-25T19:41:08.699Z"
+    },
+    "1.19.1": {
+      "version": "1.19.1",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 67049952,
+      "filename": "spigot-1.19.1.jar",
+      "timestamp": "2026-08-25T19:43:24.891Z"
+    },
+    "1.19.2": {
+      "version": "1.19.2",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 66313121,
+      "filename": "spigot-1.19.2.jar",
+      "timestamp": "2026-08-25T19:45:54.337Z"
+    },
+    "1.19.3": {
+      "version": "1.19.3",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 67736673,
+      "filename": "spigot-1.19.3.jar",
+      "timestamp": "2026-08-25T19:48:31.237Z"
+    },
+    "1.19.4": {
+      "version": "1.19.4",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 71219477,
+      "filename": "spigot-1.19.4.jar",
+      "timestamp": "2026-08-25T19:51:04.673Z"
+    },
+    "1.20": {
+      "version": "1.20",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 71747316,
+      "filename": "spigot-1.20.jar",
+      "timestamp": "2026-08-25T19:53:39.256Z"
+    },
+    "1.20.1": {
+      "version": "1.20.1",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 71747273,
+      "filename": "spigot-1.20.1.jar",
+      "timestamp": "2026-08-25T19:56:03.413Z"
+    },
+    "1.20.3": {
+      "version": "1.20.3",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 73588520,
+      "filename": "spigot-1.20.3.jar",
+      "timestamp": "2026-08-25T20:01:36.061Z"
+    },
+    "1.20.4": {
+      "version": "1.20.4",
+      "javaVersion": 17,
+      "buildToolsVersion": "",
+      "size": 73588792,
+      "filename": "spigot-1.20.4.jar",
+      "timestamp": "2026-08-25T20:04:07.360Z"
+    },
+    "1.20.6": {
+      "version": "1.20.6",
+      "javaVersion": 21,
+      "buildToolsVersion": "",
+      "size": 76012096,
+      "filename": "spigot-1.20.6.jar",
+      "timestamp": "2026-08-25T20:09:19.226Z"
+    },
+    "1.21.1": {
+      "version": "1.21.1",
+      "javaVersion": 21,
+      "buildToolsVersion": "",
+      "size": 76495178,
+      "filename": "spigot-1.21.1.jar",
+      "timestamp": "2026-08-25T20:15:34.101Z"
+    },
+    "1.21.3": {
+      "version": "1.21.3",
+      "javaVersion": 21,
+      "buildToolsVersion": "",
+      "size": 81352776,
+      "filename": "spigot-1.21.3.jar",
+      "timestamp": "2026-08-25T20:21:00.659Z"
+    }
+  }
 }
