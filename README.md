@@ -26,18 +26,18 @@
 
 JAR файлы доступны через GitHub Releases:
 ```
-https://github.com/{owner}/spigot-releases/releases/download/spigot-{version}/spigot-{version}.jar
+https://github.com/MAINER4IK/spigot-versions-api/releases/download/spigot-{version}/spigot-{version}.jar
 ```
 
 ### Пример использования в лаунчере
 
 ```typescript
-const response = await fetch('https://raw.githubusercontent.com/{owner}/spigot-releases/main/versions.json');
+const response = await fetch('https://github.com/MAINER4IK/spigot-versions-api/main/versions.json');
 const data = await response.json();
 
 // Получить ссылку на JAR
 const version = data.versions['1.21.4'];
-const downloadUrl = `https://github.com/{owner}/spigot-releases/releases/download/spigot-${version.version}/${version.filename}`;
+const downloadUrl = `https://github.com/MAINER4IK/spigot-versions-api/releases/download/spigot-${version.version}/${version.filename}`;
 ```
 
 ## GitHub Actions
@@ -55,9 +55,3 @@ Workflow запускается каждые 6 часов и проверяет 
 - Cron: `0 */6 * * *` (каждые 6 часов)
 - Проверяет hub.spigotmc.org/versions/ на наличие новых версий
 - Собирает только новые версии (кэширование в versions.json)
-
-## Требования
-
-- Java 21+ (для сборки大部分 версий)
-- Java 25+ (для MC 26.x)
-- BuildTools.jar (в папке tools/)
