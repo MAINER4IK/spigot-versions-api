@@ -1,0 +1,14 @@
+{
+  "name": "spigot-releases",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "check": "node --loader ts-node/esm src/check.ts",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^26.3.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.7.0"
+  }
+}
