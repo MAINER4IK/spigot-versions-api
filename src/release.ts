@@ -13,6 +13,22 @@ function fetchText(url: string): Promise<string> {
   });
 }
 
+// GitHub orders releases by their target commit's date. Give each version a
+// deterministic date so parallel builds and late releases remain ordered.
+function prepareReleaseTag(version: string, tag: string): void {
+  const parts = version.split('.').map(Number);
+  if (parts.some(n => n >= 1000)) throw new Error(`Version component too large: ${version}`);
+  const [major, minor, patch = 0] = parts;
+  const date = new Date(Date.UTC(2024, 0, 1) + (major * 1_000_000 + minor * 1_000 + patch) * 1000).toISOString();
+  const tree = execFileSync('git', ['rev-parse', 'HEAD^{tree}'], { encoding: 'utf8' }).trim();
+  const commit = execFileSync('git', ['commit-tree', tree, '-p', 'HEAD'], {
+    input: `Release ordering for Spigot ${version}\n`, encoding: 'utf8',
+    env: { ...process.env, GIT_AUTHOR_DATE: date, GIT_COMMITTER_DATE: date },
+  }).trim();
+  execFileSync('git', ['tag', '-f', tag, commit], { stdio: 'inherit' });
+  execFileSync('git', ['push', '--force', 'origin', `refs/tags/${tag}`], { stdio: 'inherit' });
+}
+
 async function main() {
   if (process.argv[2] === 'list') {
     const html = await fetchText('https://hub.spigotmc.org/versions/');
@@ -61,6 +77,7 @@ async function main() {
     execFileSync('gh', ['release', 'upload', tag, jar, '--clobber'], { stdio: 'inherit' });
     execFileSync('gh', ['release', 'edit', tag, '--notes', notes], { stdio: 'inherit' });
   } else {
+    prepareReleaseTag(version, tag);
     execFileSync('gh', ['release', 'create', tag, jar, '--title', `Spigot ${version}`, '--notes', notes, '--latest=false'], { stdio: 'inherit' });
   }
   mkdirSync('result', { recursive: true });
