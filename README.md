@@ -16,7 +16,9 @@
       "buildToolsVersion": "a1b2c3d",
       "size": 86543210,
       "filename": "spigot-1.21.4.jar",
-      "timestamp": "2026-08-25T18:00:00.000Z"
+      "timestamp": "2026-08-25T18:00:00.000Z",
+      "releaseTag": "spigot-001.021.004",
+      "downloadUrl": "https://github.com/MAINER4IK/spigot-versions-api/releases/download/spigot-001.021.004/spigot-1.21.4.jar"
     }
   }
 }
@@ -26,7 +28,7 @@
 
 JAR файлы доступны через GitHub Releases:
 ```
-https://github.com/MAINER4IK/spigot-versions-api/releases/download/spigot-{version}/spigot-{version}.jar
+https://github.com/MAINER4IK/spigot-versions-api/releases/download/{releaseTag}/spigot-{version}.jar
 ```
 
 ### Пример использования в лаунчере
@@ -37,7 +39,7 @@ const data = await response.json();
 
 // Получить ссылку на JAR
 const version = data.versions['1.21.4'];
-const downloadUrl = `https://github.com/MAINER4IK/spigot-versions-api/releases/download/spigot-${version.version}/${version.filename}`;
+const downloadUrl = version.downloadUrl;
 ```
 
 ## GitHub Actions
