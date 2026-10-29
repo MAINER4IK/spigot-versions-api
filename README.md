@@ -32,7 +32,7 @@ https://github.com/MAINER4IK/spigot-versions-api/releases/download/spigot-{versi
 ### Пример использования в лаунчере
 
 ```typescript
-const response = await fetch('https://github.com/MAINER4IK/spigot-versions-api/main/versions.json');
+const response = await fetch('https://raw.githubusercontent.com/MAINER4IK/spigot-versions-api/main/versions.json');
 const data = await response.json();
 
 // Получить ссылку на JAR
@@ -54,4 +54,4 @@ Workflow запускается каждые 6 часов и проверяет 
 
 - Cron: `0 */6 * * *` (каждые 6 часов)
 - Проверяет hub.spigotmc.org/versions/ на наличие новых версий
-- Собирает только новые версии (кэширование в versions.json)
+- Создаёт релиз для каждой доступной версии Spigot и заменяет JAR при изменении данных сборки.

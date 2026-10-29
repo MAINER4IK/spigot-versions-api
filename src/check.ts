@@ -92,7 +92,7 @@ function getAllVersions(): Promise<string[]> {
   });
 }
 
-function findJava(requiredMajor: number): string | null {
+function findJava(requiredMajor: number, maxMajor = Infinity): string | null {
   const isWindows = process.platform === 'win32';
   const exe = isWindows ? 'java.exe' : 'java';
 
@@ -100,7 +100,7 @@ function findJava(requiredMajor: number): string | null {
   const javaHomes: { version: number; path: string }[] = [];
 
   for (const [key, val] of Object.entries(process.env)) {
-    const m = key.match(/^JAVA_HOME_(\d+)$/);
+    const m = key.match(/^JAVA_HOME_(\d+)(?:_X64)?$/);
     if (m && val) {
       const ver = parseInt(m[1]);
       const javaPath = join(val, 'bin', exe);
@@ -132,6 +132,7 @@ function findJava(requiredMajor: number): string | null {
   const scanPaths = [
     'C:\\Program Files\\Java',
     'C:\\Program Files\\Eclipse Adoptium',
+    'C:\\Program Files\\Microsoft',
     '/usr/lib/jvm',
     '/usr/local/lib/jvm',
   ];
@@ -164,7 +165,7 @@ function findJava(requiredMajor: number): string | null {
 
   // Pick the LOWEST version that is >= required
   // This is critical: BuildTools for MC 1.8 NEEDS Java 8, not Java 25
-  const suitable = javaHomes.filter(j => j.version >= requiredMajor);
+  const suitable = javaHomes.filter(j => j.version >= requiredMajor && j.version <= maxMajor);
   if (suitable.length === 0) {
     log(`  No Java ${requiredMajor}+ found (have: ${javaHomes.map(j => j.version).join(', ')})`);
     return null;
@@ -191,16 +192,18 @@ async function buildVersion(mcVersion: string): Promise<VersionEntry | null> {
 
   // Get required Java version
   let minJava = 8;
+  let maxJava = Infinity;
   let buildDataHash = '';
   try {
-    const info = await fetchJson<{ javaVersions?: number[]; buildData?: { ref?: string } }>(
+    const info = await fetchJson<{ javaVersions?: number[]; refs?: { BuildData?: string } }>(
       `https://hub.spigotmc.org/versions/${mcVersion}.json`
     );
     minJava = getRequiredJava(info);
-    buildDataHash = info.buildData?.ref?.substring(0, 7) || '';
-  } catch {}
+    if (info.javaVersions?.length) maxJava = Math.max(...info.javaVersions.map(v => v - 44));
+    buildDataHash = info.refs?.BuildData || '';
+  } catch (error) { log(`  [FAIL] Cannot read version metadata: ${error}`); return null; }
 
-  const javaPath = findJava(minJava);
+  const javaPath = findJava(minJava, maxJava);
   if (!javaPath) {
     log(`  [SKIP] No Java ${minJava}+ found`);
     return null;
@@ -213,15 +216,17 @@ async function buildVersion(mcVersion: string): Promise<VersionEntry | null> {
   }
 
   try {
+    if (existsSync(jarFile)) unlinkSync(jarFile);
     const javaHome = dirname(dirname(javaPath));
     log(`  Building with BuildTools...`);
     execSync(`"${javaPath}" -jar "${BUILDTOOLS_PATH}" --rev ${mcVersion} 2>&1`, {
       cwd: folder,
-      stdio: 'pipe',
-      timeout: 900_000, // 15 min
+      stdio: 'inherit',
+      timeout: 2_700_000,
       env: {
         ...process.env,
         JAVA_HOME: javaHome,
+        PATH: join(javaHome, 'bin') + (process.platform === 'win32' ? ';' : ':') + (process.env.PATH || ''),
         GIT_TERMINAL_PROMPT: '0'
       }
     });
@@ -296,11 +301,12 @@ async function main() {
   log(`Found ${allVersions.length} versions on SpigotMC`);
 
   // Find which ones need building
-  const toBuild = allVersions.filter(v => !versionsData.versions[v]);
+  const toBuild = process.env.MC_VERSION ? allVersions.filter(v => v === process.env.MC_VERSION) : allVersions.filter(v => !versionsData.versions[v]);
   log(`Already built: ${allVersions.length - toBuild.length}`);
   log(`Need to build: ${toBuild.length}`);
 
   if (toBuild.length === 0) {
+    if (process.env.MC_VERSION) throw new Error(`Version ${process.env.MC_VERSION} was not found`);
     log('Nothing to build, exiting');
     versionsData.lastUpdated = new Date().toISOString();
     writeFileSync(VERSIONS_FILE, JSON.stringify(versionsData, null, 2));
@@ -327,6 +333,7 @@ async function main() {
   log(`\n=== Complete ===`);
   log(`Success: ${success} | Failed: ${fail} | Total: ${toBuild.length}`);
   log(`Total built versions: ${Object.keys(versionsData.versions).length}`);
+  if (fail) process.exitCode = 1;
 }
 
 main().catch(e => { log(`FATAL: ${e.message}`); process.exit(1); });
