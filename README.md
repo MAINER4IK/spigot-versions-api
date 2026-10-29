@@ -57,3 +57,15 @@ Workflow запускается каждые 6 часов и проверяет 
 - Cron: `0 */6 * * *` (каждые 6 часов)
 - Проверяет hub.spigotmc.org/versions/ на наличие новых версий
 - Создаёт релиз для каждой доступной версии Spigot и заменяет JAR при изменении данных сборки.
+
+## CraftBukkit (Bukkit)
+
+Серверные JAR CraftBukkit собираются отдельным workflow `Build CraftBukkit Versions` из тех же версий BuildTools. Релизы имеют теги `bukkit-001.021.004` с числовой сортировкой, а имена файлов — `craftbukkit-1.21.4.jar`. Существующие релизы Spigot сохраняются отдельно.
+
+Индекс CraftBukkit находится в `bukkit-versions.json` и содержит поле `downloadUrl` для каждой успешно опубликованной версии. Как и у Spigot, при изменении исходных данных JAR в существующем релизе обновляется. Workflow запускается каждые 6 часов и вручную через Actions.
+
+```typescript
+const response = await fetch('https://raw.githubusercontent.com/MAINER4IK/spigot-versions-api/main/bukkit-versions.json');
+const data = await response.json();
+const downloadUrl = data.versions['1.21.4'].downloadUrl;
+```

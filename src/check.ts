@@ -7,7 +7,9 @@ import {
 import { join, dirname } from 'node:path';
 
 const BUILDS_ROOT = join(process.cwd(), 'builds');
-const VERSIONS_FILE = join(process.cwd(), 'versions.json');
+const SERVER_TYPE = process.env.SERVER_TYPE || 'spigot';
+if (!['spigot', 'craftbukkit'].includes(SERVER_TYPE)) throw new Error(`Invalid server type: ${SERVER_TYPE}`);
+const VERSIONS_FILE = join(process.cwd(), SERVER_TYPE === 'craftbukkit' ? 'bukkit-versions.json' : 'versions.json');
 const BUILDTOOLS_PATH = join(process.cwd(), 'tools', 'BuildTools.jar');
 const BUILDTOOLS_URL = 'https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar';
 
@@ -185,7 +187,7 @@ function getRequiredJava(versionData: { javaVersions?: number[] }): number {
 
 async function buildVersion(mcVersion: string): Promise<VersionEntry | null> {
   const folder = join(BUILDS_ROOT, mcVersion);
-  const jarName = `spigot-${mcVersion}.jar`;
+  const jarName = `${SERVER_TYPE}-${mcVersion}.jar`;
   const jarFile = join(folder, jarName);
 
   mkdirSync(folder, { recursive: true });
@@ -219,7 +221,8 @@ async function buildVersion(mcVersion: string): Promise<VersionEntry | null> {
     if (existsSync(jarFile)) unlinkSync(jarFile);
     const javaHome = dirname(dirname(javaPath));
     log(`  Building with BuildTools...`);
-    execSync(`"${javaPath}" -jar "${BUILDTOOLS_PATH}" --rev ${mcVersion} 2>&1`, {
+    const compileOption = SERVER_TYPE === 'craftbukkit' ? ' --compile craftbukkit' : '';
+    execSync(`"${javaPath}" -jar "${BUILDTOOLS_PATH}" --rev ${mcVersion}${compileOption} 2>&1`, {
       cwd: folder,
       stdio: 'inherit',
       timeout: 2_700_000,
@@ -247,7 +250,7 @@ async function buildVersion(mcVersion: string): Promise<VersionEntry | null> {
 
     // Sometimes the jar is named differently
     const possibleJars = readdirSync(folder)
-      .filter((f: string) => f.startsWith('spigot') && f.endsWith('.jar') && !f.includes('BuildTools'));
+      .filter((f: string) => f.startsWith(`${SERVER_TYPE}-`) && f.endsWith('.jar') && !f.includes('BuildTools'));
 
     if (possibleJars.length > 0) {
       const altJar = possibleJars[0] as string;
