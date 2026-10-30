@@ -22,11 +22,40 @@ function releaseTag(version: string, prefix: string): string {
 }
 
 async function main() {
-  if (process.argv[2] === 'list') {
+  if (process.argv[2] === 'list' || process.argv[2] === 'plan') {
     const html = await fetchText('https://hub.spigotmc.org/versions/');
     const versions = [...new Set([...html.matchAll(/href="(\d+\.\d+(?:\.\d+)?)\.json"/g)].map(m => m[1]))];
     if (!versions.length) throw new Error('No Spigot versions found');
-    console.log(JSON.stringify(versions));
+    if (process.argv[2] === 'list') { console.log(JSON.stringify(versions)); return; }
+    const serverType = process.env.SERVER_TYPE || 'spigot';
+    if (!['spigot', 'craftbukkit'].includes(serverType)) throw new Error(`Invalid server type: ${serverType}`);
+    const prefix = serverType === 'craftbukkit' ? 'bukkit' : 'spigot';
+    const indexFile = serverType === 'craftbukkit' ? 'bukkit-versions.json' : 'versions.json';
+    const index = JSON.parse(readFileSync(indexFile, 'utf8')).versions;
+    const blocked: Record<string, { fingerprint: string }> = serverType === 'spigot'
+      ? JSON.parse(readFileSync('spigot-blocked-builds.json', 'utf8')) : {};
+    const repo = process.env.GITHUB_REPOSITORY;
+    if (!repo) throw new Error('GITHUB_REPOSITORY is required');
+    const pages = JSON.parse(execFileSync('gh', ['api', `repos/${repo}/releases?per_page=100`, '--paginate', '--slurp'], { encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 }));
+    const releases = new Map<string, { body?: string; assets: { name: string }[] }>(pages.flat().map((r: { tag_name: string; body?: string; assets: { name: string }[] }) => [r.tag_name, r]));
+    const pending: string[] = [];
+    for (let start = 0; start < versions.length; start += 8) {
+      await Promise.all(versions.slice(start, start + 8).map(async version => {
+        if (process.env.FORCE_REBUILD === 'true') { pending.push(version); return; }
+        const data = JSON.parse(await fetchText(`https://hub.spigotmc.org/versions/${version}.json`));
+        if (!data.refs || !Object.keys(data.refs).length) throw new Error(`Missing refs for ${version}`);
+        const fingerprint = createHash('sha256').update(JSON.stringify(data)).digest('hex');
+        const tag = releaseTag(version, prefix);
+        const release = releases.get(tag);
+        const filename = `${serverType}-${version}.jar`;
+        if (serverType === 'spigot' && !release && blocked[version]?.fingerprint === fingerprint) return;
+        if (!release?.body?.includes(`spigot-source-sha256: ${fingerprint}`) ||
+            !release.assets.some(asset => asset.name === filename) ||
+            index[version]?.sourceFingerprint !== fingerprint || index[version]?.releaseTag !== tag) pending.push(version);
+      }));
+    }
+    pending.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    console.log(JSON.stringify(pending));
     return;
   }
   const version = process.env.MC_VERSION;

@@ -1,0 +1,26 @@
+{
+  "1.8": {
+    "fingerprint": "ce723d76a746481ad1da912e56a404d220a4682ae35f5bafff7a2585b51ffd68",
+    "reason": "Legacy Spigot build requires an unavailable BungeeCord snapshot dependency."
+  },
+  "1.8.3": {
+    "fingerprint": "551bd915feb3907e26651b5cd8ca5abcd1e168249e799f9ded65b368ba546ef2",
+    "reason": "Legacy Spigot build requires an unavailable BungeeCord snapshot dependency."
+  },
+  "1.9": {
+    "fingerprint": "5ba33fc99c9b5cc71475d7a53fdba0af641de52ade4b52eb4dcef8c6078ab730",
+    "reason": "Legacy Spigot build requires an unavailable BungeeCord snapshot dependency."
+  },
+  "1.9.2": {
+    "fingerprint": "700a1cab5700d8df69d1882646fc4b39349035fcedc7371d629bc0038575a162",
+    "reason": "Legacy Spigot build requires an unavailable BungeeCord snapshot dependency."
+  },
+  "1.11": {
+    "fingerprint": "ecf0610fce1c2ae11e7595eccb5a676633371d62a947f70a191979bf29998915",
+    "reason": "Legacy Spigot build requires an unavailable BungeeCord snapshot dependency."
+  },
+  "1.12": {
+    "fingerprint": "aa8488941dd300b662f3b062920521a25c73b27bd63978008d4ef78d2cc9ded7",
+    "reason": "Legacy Spigot build requires an unavailable BungeeCord snapshot dependency."
+  }
+}

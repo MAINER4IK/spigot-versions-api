@@ -2,7 +2,7 @@ name: Build Spigot Versions
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 3 * * *'
   workflow_dispatch:
     inputs:
       force_rebuild:
@@ -29,10 +29,15 @@ jobs:
           node-version: '20'
       - run: npm install
       - id: versions
-        run: echo "versions=$(node --loader ts-node/esm src/release.ts list)" >> "$GITHUB_OUTPUT"
+        run: echo "versions=$(node --loader ts-node/esm src/release.ts plan)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE_REBUILD: ${{ inputs.force_rebuild }}
+          SERVER_TYPE: spigot
 
   build:
     needs: discover
+    if: needs.discover.outputs.versions != '[]'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:

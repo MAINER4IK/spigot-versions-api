@@ -44,7 +44,7 @@ const downloadUrl = version.downloadUrl;
 
 ## GitHub Actions
 
-Workflow запускается каждые 6 часов и проверяет новые версии Spigot на SpigotMC.
+Workflow запускается раз в сутки и проверяет новые версии Spigot на SpigotMC.
 
 ### Ручной запуск
 
@@ -54,7 +54,7 @@ Workflow запускается каждые 6 часов и проверяет 
 
 ### Автоматический запуск
 
-- Cron: `0 */6 * * *` (каждые 6 часов)
+- Cron: `0 3 * * *` (ежедневно в 03:00 UTC)
 - Проверяет hub.spigotmc.org/versions/ на наличие новых версий
 - Создаёт релиз для каждой доступной версии Spigot и заменяет JAR при изменении данных сборки.
 
@@ -62,10 +62,12 @@ Workflow запускается каждые 6 часов и проверяет 
 
 Серверные JAR CraftBukkit собираются отдельным workflow `Build CraftBukkit Versions` из тех же версий BuildTools. Релизы имеют теги `bukkit-001.021.004` с числовой сортировкой, а имена файлов — `craftbukkit-1.21.4.jar`. Существующие релизы Spigot сохраняются отдельно.
 
-Индекс CraftBukkit находится в `bukkit-versions.json` и содержит поле `downloadUrl` для каждой успешно опубликованной версии. Как и у Spigot, при изменении исходных данных JAR в существующем релизе обновляется. Workflow запускается каждые 6 часов и вручную через Actions.
+Индекс CraftBukkit находится в `bukkit-versions.json` и содержит поле `downloadUrl` для каждой успешно опубликованной версии. Как и у Spigot, при изменении исходных данных JAR в существующем релизе обновляется. Workflow запускается раз в сутки и вручную через Actions.
 
 ```typescript
 const response = await fetch('https://raw.githubusercontent.com/MAINER4IK/spigot-versions-api/main/bukkit-versions.json');
 const data = await response.json();
 const downloadUrl = data.versions['1.21.4'].downloadUrl;
 ```
+
+Шесть старых сборок Spigot временно пропускаются автоматически из-за недоступных зависимостей BungeeCord. При изменении исходных данных Spigot проверка возобновится; ручной запуск с `Force rebuild` также позволяет повторить попытку.
