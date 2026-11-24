@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-30T03:28:34.424Z",
+  "lastUpdated": "2026-11-24T13:24:02.484Z",
   "versions": {
     "1.10.2": {
       "version": "1.10.2",
@@ -676,10 +676,10 @@
       "version": "26.3",
       "javaVersion": 25,
       "buildToolsVersion": "39e62795554dcf6b62e922bc061705b3dc228f88",
-      "size": 85667273,
+      "size": 85667263,
       "filename": "spigot-26.3.jar",
-      "timestamp": "2026-10-29T01:59:12.698Z",
-      "sourceFingerprint": "b4609885fdb244eaa0af1d385dfa52e87a6e4c7c1047b53bd6fbe05c29b2eddb",
+      "timestamp": "2026-11-24T13:23:46.305Z",
+      "sourceFingerprint": "295f73171174b390730107f2b0c4c50b450eaeb2dfaef1a5939b01bffbcdbf30",
       "releaseTag": "spigot-026.003",
       "downloadUrl": "https://github.com/MAINER4IK/spigot-versions-api/releases/download/spigot-026.003/spigot-26.3.jar"
     }
