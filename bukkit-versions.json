@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-20T10:43:08.599Z",
+  "lastUpdated": "2026-11-24T13:07:06.071Z",
   "versions": {
     "1.10.2": {
       "version": "1.10.2",
@@ -742,10 +742,10 @@
       "version": "26.3",
       "javaVersion": 25,
       "buildToolsVersion": "39e62795554dcf6b62e922bc061705b3dc228f88",
-      "size": 85339589,
+      "size": 85339610,
       "filename": "craftbukkit-26.3.jar",
-      "timestamp": "2026-10-29T08:37:32.694Z",
-      "sourceFingerprint": "b4609885fdb244eaa0af1d385dfa52e87a6e4c7c1047b53bd6fbe05c29b2eddb",
+      "timestamp": "2026-11-24T13:06:49.481Z",
+      "sourceFingerprint": "295f73171174b390730107f2b0c4c50b450eaeb2dfaef1a5939b01bffbcdbf30",
       "releaseTag": "bukkit-026.003",
       "downloadUrl": "https://github.com/MAINER4IK/spigot-versions-api/releases/download/bukkit-026.003/craftbukkit-26.3.jar"
     }
